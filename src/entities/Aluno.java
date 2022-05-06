@@ -1,39 +1,73 @@
 package entities;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import entities.enums.Situation;
+import entities.enums.Zona;
 
 public class Aluno {
-	
+
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	private static SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM");
-	
+
 	private String nome;
+	private Long cpf;
+	private Date dataDeNascimento;
 	private Integer matricula;
-	private Double mensalidade;
-	private Situation situation;
 	private Date dataDaMatricula;
-	private Date dataDaMensalidade;
+	private char sexo;
+	private Long celular;
+	private String email;
 	private FormaFisica formaFisica;
+	private Endereço endereco;
+	
+	List<Mensalidade> mensalidade = new ArrayList<>();
 
 	public Aluno() {
+		
 	}
 
-
-	public Aluno(String nome, Integer matricula, Double mensalidade, Situation situation,
-			FormaFisica formaFisica) throws ParseException {
+	public Aluno(String nome, Long cpf, Date dataDeNascimento, Integer matricula, Date dataDaMatricula, char sexo,
+			Long celular, String email, FormaFisica formaFisica, Endereço endereco) {
 		this.nome = nome;
+		this.cpf = cpf;
+		this.dataDeNascimento = dataDeNascimento;
 		this.matricula = matricula;
-		this.mensalidade = mensalidade;
-		this.situation = situation;
-		this.dataDaMatricula =  new Date();
+		this.dataDaMatricula = dataDaMatricula;
+		this.sexo = sexo;
+		this.celular = celular;
+		this.email = email;
 		this.formaFisica = formaFisica;
-		String dataDaMensalidade = sdf1.format(new Date());
-		this.dataDaMensalidade = sdf1.parse(dataDaMensalidade);
+		this.endereco = endereco;
 		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dataDaMatricula);
+		cal.add(Calendar.MONTH,1);
+		Date dataDeVencimento = cal.getTime();
+		
+		Double valor = 0.0;
+		if(endereco.getZona().compareTo(Zona.RURAL) == 0) {
+			valor = 55.00;
+		}
+		else {
+			valor = 60.00;
+		}
+		
+		mensalidade.add(new Mensalidade(dataDeVencimento, dataDaMatricula, valor));
+		
+	}
+	
+
+	public List<Mensalidade> getMensalidade() {
+		return mensalidade;
+	}
+
+	public void setMensalidade(List<Mensalidade> mensalidade) {
+		this.mensalidade = mensalidade;
 	}
 
 	public String getNome() {
@@ -44,39 +78,61 @@ public class Aluno {
 		this.nome = nome;
 	}
 
-	public Double getMensalidade() {
-		return mensalidade;
+	public Long getCpf() {
+		return cpf;
 	}
 
-	public void setMensalidade(Double mensalidade) {
-		this.mensalidade = mensalidade;
+	public void setCpf(Long cpf) {
+		this.cpf = cpf;
 	}
 
-	public Situation getSituation() {
-		return situation;
+	public Date getDataDeNascimento() {
+		return dataDeNascimento;
 	}
 
-	public void setSituation(Situation situation) {
-		this.situation = situation;
+	public void setDataDeNascimento(Date dataDeNascimento) {
+		this.dataDeNascimento = dataDeNascimento;
 	}
 
 	public Integer getMatricula() {
 		return matricula;
 	}
 
+	public void setMatricula(Integer matricula) {
+		this.matricula = matricula;
+	}
+
 	public Date getDataDaMatricula() {
 		return dataDaMatricula;
 	}
 
-	public Date getDataDaMensalidade() {
-		return dataDaMensalidade;
+	public void setDataDaMatricula(Date dataDaMatricula) {
+		this.dataDaMatricula = dataDaMatricula;
 	}
 
-
-	public void setDataDaMensalidade(Date dataDaMensalidade) {
-		this.dataDaMensalidade = dataDaMensalidade;
+	public char getSexo() {
+		return sexo;
 	}
 
+	public void setSexo(char sexo) {
+		this.sexo = sexo;
+	}
+
+	public Long getCelular() {
+		return celular;
+	}
+
+	public void setCelular(Long celular) {
+		this.celular = celular;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public FormaFisica getFormaFisica() {
 		return formaFisica;
@@ -86,14 +142,12 @@ public class Aluno {
 		this.formaFisica = formaFisica;
 	}
 
-
-	@Override
-	public String toString() {
-		return 	"Aluno: " +  nome +
-				"\nData da Mensalidade: " + sdf1.format(dataDaMensalidade)+
-				"\nData da Matricula: " + sdf.format(dataDaMatricula);
+	public Endereço getEndereco() {
+		return endereco;
 	}
-	
 
-	
+	public void setEndereco(Endereço endereco) {
+		this.endereco = endereco;
+	}
+
 }

@@ -1,5 +1,5 @@
 package entities.enums;
 
 public enum Situation {
-	PENDENTE, EM_DIA, ATRASADA;
+	 PAGA, PENDENTE, ATRASADA, TREINO_CANSELADO;
 }
