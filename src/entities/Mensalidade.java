@@ -60,7 +60,7 @@ public class Mensalidade {
 	@Override
 	public String toString() {
 		return "Data de Pagamento: " + sdf.format(dataDePagamento)
-		+ ", Data de Vencimento: "+ dataDeVencimento+ ", Status: " + situation + ", Valor: " + valor;
+		+ ", Data de Vencimento: "+ sdf.format(dataDeVencimento)+ ", Status da Mensalidade: " + situation + ", Valor: " + valor;
 	}
 
 	

@@ -6,13 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import entities.enums.Situation;
 import entities.enums.Zona;
 
 public class Aluno {
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	private static SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM");
 
 	private String nome;
 	private Long cpf;
@@ -149,5 +147,14 @@ public class Aluno {
 	public void setEndereco(Endereço endereco) {
 		this.endereco = endereco;
 	}
+
+	@Override
+	public String toString() {
+		return "Aluno Nome: " + nome + "\nCPF: " + cpf + "\nData de Nascimento: " + sdf.format(dataDeNascimento) + "\nMatricula: "
+				+ matricula + "\nData da Matricula: " + sdf.format(dataDaMatricula) + "\nSexo: " + sexo + "\nCelular: " + celular
+				+ "\nEmail=" + email + "\nForma Fisica: " + formaFisica + "\nEndereco: " + endereco + "\nMensalidade: "
+				+ mensalidade.get(mensalidade.size()-1);
+	}
+	
 
 }
