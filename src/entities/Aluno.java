@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import entities.enums.Situation;
 import entities.enums.Zona;
 
 public class Aluno {
@@ -22,11 +23,11 @@ public class Aluno {
 	private String email;
 	private FormaFisica formaFisica;
 	private Endereço endereco;
-	
+
 	List<Mensalidade> mensalidade = new ArrayList<>();
 
 	public Aluno() {
-		
+
 	}
 
 	public Aluno(String nome, Long cpf, Date dataDeNascimento, Integer matricula, Date dataDaMatricula, char sexo,
@@ -41,27 +42,40 @@ public class Aluno {
 		this.email = email;
 		this.formaFisica = formaFisica;
 		this.endereco = endereco;
-		
+
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dataDaMatricula);
-		cal.add(Calendar.MONTH,1);
+		cal.add(Calendar.MONTH, 1);
 		Date dataDeVencimento = cal.getTime();
-		
+
 		Double valor = 0.0;
-		if(endereco.getZona().compareTo(Zona.RURAL) == 0) {
+		if (endereco.getZona().compareTo(Zona.RURAL) == 0) {
 			valor = 55.00;
-		}
-		else {
+		} else {
 			valor = 60.00;
 		}
-		
-		mensalidade.add(new Mensalidade(dataDeVencimento, dataDaMatricula, valor));
-		
-	}
-	
 
-	public List<Mensalidade> getMensalidade() {
-		return mensalidade;
+		mensalidade.add(new Mensalidade(dataDeVencimento, dataDaMatricula, valor));
+
+	}
+
+	public Mensalidade getMensalidade() {
+		Date agora = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(mensalidade.get(mensalidade.size() - 1).getDataDeVencimento());
+		cal.add(Calendar.DAY_OF_MONTH, 15);
+
+		Date atrasada = cal.getTime();
+
+		if (agora.after(mensalidade.get(mensalidade.size() - 1).getDataDeVencimento())
+				&& mensalidade.get(mensalidade.size() - 1).getSituation() == Situation.PAGA) {
+			mensalidade.add(new Mensalidade(mensalidade.get(mensalidade.size()-1).getDataDeVencimento(), mensalidade.get(mensalidade.size() - 1).getDataDePagamento(),
+					mensalidade.get(mensalidade.size() - 1).getValor()));
+			mensalidade.get(mensalidade.size() - 1).setSituation(Situation.PENDENTE);
+			return mensalidade.get(mensalidade.size() - 1);
+		} else {
+			return mensalidade.get(mensalidade.size() - 1);
+		}
 	}
 
 	public void setMensalidade(List<Mensalidade> mensalidade) {
@@ -150,11 +164,10 @@ public class Aluno {
 
 	@Override
 	public String toString() {
-		return "Aluno Nome: " + nome + "\nCPF: " + cpf + "\nData de Nascimento: " + sdf.format(dataDeNascimento) + "\nMatricula: "
-				+ matricula + "\nData da Matricula: " + sdf.format(dataDaMatricula) + "\nSexo: " + sexo + "\nCelular: " + celular
-				+ "\nEmail=" + email + "\nForma Fisica: " + formaFisica + "\nEndereco: " + endereco + "\nMensalidade: "
-				+ mensalidade.get(mensalidade.size()-1);
+		return "Aluno Nome: " + nome + "\nCPF: " + cpf + "\nData de Nascimento: " + sdf.format(dataDeNascimento)
+				+ "\nMatricula: " + matricula + "\nData da Matricula: " + sdf.format(dataDaMatricula) + "\nSexo: "
+				+ sexo + "\nCelular: " + celular + "\nEmail=" + email + "\nForma Fisica: " + formaFisica
+				+ "\nEndereco: " + endereco + "\nMensalidade: " + mensalidade.get(mensalidade.size() - 1);
 	}
-	
 
 }
