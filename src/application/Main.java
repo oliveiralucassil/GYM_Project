@@ -35,7 +35,7 @@ public class Main {
 		char option = 'S';
 
 		do {
-			Date dataDaMatricula = sdf.parse("08/04/2022");
+			Date dataDaMatricula = sdf.parse("13/03/2022");
 
 			Integer matricula = alunos.size();
 			Date dataDeNascimento = sdf.parse("30/11/2000");

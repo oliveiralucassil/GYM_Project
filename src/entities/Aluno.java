@@ -32,6 +32,7 @@ public class Aluno {
 
 	public Aluno(String nome, Long cpf, Date dataDeNascimento, Integer matricula, Date dataDaMatricula, char sexo,
 			Long celular, String email, FormaFisica formaFisica, Endereço endereco) {
+		
 		this.nome = nome;
 		this.cpf = cpf;
 		this.dataDeNascimento = dataDeNascimento;
@@ -62,17 +63,49 @@ public class Aluno {
 	public Mensalidade getMensalidade() {
 		Date agora = new Date();
 		Calendar cal = Calendar.getInstance();
+
 		cal.setTime(mensalidade.get(mensalidade.size() - 1).getDataDeVencimento());
 		cal.add(Calendar.DAY_OF_MONTH, 15);
 
 		Date atrasada = cal.getTime();
+		Calendar cal1 = Calendar.getInstance();
+
+		cal1.setTime(mensalidade.get(mensalidade.size() - 1).getDataDeVencimento());
+		cal1.add(Calendar.MONTH, 1);
+		Date canselada = cal1.getTime();
 
 		if (agora.after(mensalidade.get(mensalidade.size() - 1).getDataDeVencimento())
 				&& mensalidade.get(mensalidade.size() - 1).getSituation() == Situation.PAGA) {
-			mensalidade.add(new Mensalidade(mensalidade.get(mensalidade.size()-1).getDataDeVencimento(), mensalidade.get(mensalidade.size() - 1).getDataDePagamento(),
-					mensalidade.get(mensalidade.size() - 1).getValor()));
-			mensalidade.get(mensalidade.size() - 1).setSituation(Situation.PENDENTE);
+
+			mensalidade.add(new Mensalidade(mensalidade.get(mensalidade.size() - 1).getDataDeVencimento(),
+				mensalidade.get(mensalidade.size() - 1).getDataDePagamento(),
+				mensalidade.get(mensalidade.size() - 1).getValor()));
+
+			if (agora.after(atrasada) && agora.before(canselada)) {
+				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.ATRASADA);
+			} 
+			else if (agora.compareTo(canselada) >= 0) {
+				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.TREINO_CANSELADO);
+			} 
+			else {
+				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.PENDENTE);
+			}
 			return mensalidade.get(mensalidade.size() - 1);
+			
+		} else if (agora.after(mensalidade.get(mensalidade.size() - 1).getDataDeVencimento())
+				&& mensalidade.get(mensalidade.size() - 1).getSituation() != Situation.PAGA) {
+			
+			if (agora.after(atrasada) && agora.before(canselada)) {
+				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.ATRASADA);
+			} 
+			else if (agora.after(canselada)) {
+				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.TREINO_CANSELADO);
+			} 
+			else {
+				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.PENDENTE);
+			}
+			return mensalidade.get(mensalidade.size() - 1);
+			
 		} else {
 			return mensalidade.get(mensalidade.size() - 1);
 		}
