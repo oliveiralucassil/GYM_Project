@@ -1,9 +1,14 @@
 package entities;
 
+import java.io.Serializable;
+
 import entities.enums.Zona;
 
-public class Endereço {
-
+public class Endereço implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7979266061166888426L;
 	private String cidade;
 	private Zona zona;
 	private String bairro;
@@ -62,5 +67,13 @@ public class Endereço {
 	public void setNumero(Integer numero) {
 		this.numero = numero;
 	}
+
+	@Override
+	public String toString() {
+		return "Cidade: " + cidade + ", Zona: " + zona + ", Bairro: " + bairro + ", Rua: " + rua + ", Numero: "
+				+ numero;
+	}
+	
+	
 
 }

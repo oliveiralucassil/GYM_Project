@@ -1,5 +1,7 @@
 package entities.enums;
 
-public enum Zona {
+import java.io.Serializable;
+
+public enum Zona implements Serializable {
 	RURAL, URBANA;
 }

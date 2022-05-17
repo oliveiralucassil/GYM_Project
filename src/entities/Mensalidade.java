@@ -1,12 +1,17 @@
 package entities;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import entities.enums.Situation;
 
-public class Mensalidade {
-	
+public class Mensalidade implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3997271522632552024L;
+
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
 	private Date dataDeVencimento;

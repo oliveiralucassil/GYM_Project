@@ -1,5 +1,10 @@
 package application;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,8 +26,9 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
 
-		List<Aluno> alunos = new ArrayList<>();
+		List<Aluno> alunos = leitorListasAluno();
 		System.out.println("Gerenciador de Academias ");
 		System.out.println("\nAdicionar aluno         (0) ");
 		System.out.println("Alunos Matriculados     (1) ");
@@ -34,52 +40,98 @@ public class Main {
 		System.out.println("---------------------------------");
 		char option = 'S';
 
-		do {
-			Date dataDaMatricula = sdf.parse("13/03/2022");
+		if (entrada == 0) {
 
-			Integer matricula = alunos.size();
-			Date dataDeNascimento = sdf.parse("30/11/2000");
-			long cpf = 1341485749;
+			do {
 
-			/*
-			 * sc.nextLine(); System.out.print("\nNome: "); String nome = sc.nextLine();
-			 * System.out.print("CPF: "); Long cpf = sc.nextLong();
-			 * System.out.print("Data de Nascimento (dd/MM/yyyy): "); Date dataDeNascimento
-			 * = sdf.parse(sc.next()); System.out.print("Sexo (M/F): "); char sexo =
-			 * sc.next().charAt(0); System.out.print("Celular (##) #####-####: "); Long
-			 * celular = sc.nextLong(); System.out.print("Email: "); String email =
-			 * sc.next(); System.out.print("Altura (cm): "); Integer altura = sc.nextInt();
-			 * System.out.print("Peso (kg): "); Integer peso = sc.nextInt(); sc.nextLine();
-			 * System.out.print("Doença: "); String doenca = sc.nextLine();
-			 * System.out.println("\n\nEndereço: "); System.out.print("Cidade: "); String
-			 * cidade = sc.nextLine(); System.out.print("Zona: "); String zona = sc.next();
-			 * sc.nextLine(); System.out.print("Bairro: "); String bairro = sc.nextLine();
-			 * System.out.print("Rua: "); String rua = sc.nextLine();
-			 * System.out.print("Numero: "); Integer numero = sc.nextInt();
-			 * 
-			 * alunos.add(new Aluno(nome, cpf, dataDeNascimento, matricula, dataDaMatricula,
-			 * sexo, celular, email, new FormaFisica(altura, peso, doenca), new
-			 * Endereço(cidade, Zona.valueOf(zona), bairro, rua, numero)));
-			 */
-			alunos.add(new Aluno("Lucas Oliveira da Silva", cpf, dataDeNascimento, matricula, dataDaMatricula, 'M',
-					(long) 8499603, "lucas7oliveira.sil@gmail.com", new FormaFisica(173, 89, "Nenhuma"),
-					new Endereço("Portalegre", Zona.valueOf("RURAL"), "Centro", "Osvaldite Rodrigues", 16)));
+				Integer matricula = alunos.size();
 
-			System.out.println("\nValor da Mensalidade: "
-					+ String.format("%.2f", alunos.get(alunos.size()-1).getMensalidade().getValor()));
-			System.out.println("\n" + alunos.get(alunos.size() - 1));
-			System.out.print("\nCadastrar outro Aluno (S/N)? ");
-			option = sc.next().charAt(0);
-		} while (option == 'S');
-		System.out.println("");
-		
-		for (Aluno x : alunos) {
-			System.out.println("Nome				Data da Matricula		Data de Vencimento		Status Mensalidade(s)");
-			System.out.println(x.getNome() + "		" + sdf.format(x.getDataDaMatricula()) + "			"
-					+ sdf.format(x.getMensalidade().getDataDeVencimento()) + "			"+ x.getMensalidade().getSituation());
+				sc.nextLine();
+				System.out.print("\nNome: ");
+				String nome = sc.nextLine();
+				System.out.print("CPF: ");
+				Long cpf = sc.nextLong();
+				System.out.print("Data de Nascimento (dd/MM/yyyy): ");
+				Date dataDeNascimento = sdf.parse(sc.next());
+				System.out.print("Sexo (M/F): ");
+				char sexo = sc.next().charAt(0);
+				System.out.print("Celular (##) #####-####: ");
+				Long celular = sc.nextLong();
+				System.out.print("Email: ");
+				String email = sc.next();
+				System.out.print("Altura (cm): ");
+				Integer altura = sc.nextInt();
+				System.out.print("Peso (kg): ");
+				Integer peso = sc.nextInt();
+				sc.nextLine();
+				System.out.print("Doença: ");
+				String doenca = sc.nextLine();
+				System.out.print("Horario: ");
+				Date horario = sdf1.parse(sc.next());
+				System.out.print("Data da Matricula: ");
+				Date dataDaMatricula = sdf.parse(sc.next());
+				System.out.println("\nENDEREÇO ");
+				System.out.print("Cidade: ");
+				String cidade = sc.nextLine();
+				sc.nextLine();
+				System.out.print("Zona: ");
+				String zona = sc.next();
+				sc.nextLine();
+				System.out.print("Bairro: ");
+				String bairro = sc.nextLine();
+				System.out.print("Rua: ");
+				String rua = sc.nextLine();
+				System.out.print("Numero: ");
+				Integer numero = sc.nextInt();
 
+				alunos.add(new Aluno(nome, cpf, dataDeNascimento, matricula, horario, dataDaMatricula, sexo, celular,
+						email, new FormaFisica(altura, peso, doenca),
+						new Endereço(cidade, Zona.valueOf(zona), bairro, rua, numero)));
+
+				System.out.println("\nValor da Mensalidade: "
+						+ String.format("%.2f", alunos.get(alunos.size() - 1).getMensalidade().getValor()));
+				System.out.println("\n" + alunos.get(alunos.size() - 1));
+
+				System.out.print("\nCadastrar outro Aluno (S/N)? ");
+				option = sc.next().charAt(0);
+
+			} while (option == 'S');
+
+			gravadorListaAluno(alunos);
+		} else if (entrada == 1) {
+			System.out.println("");
+			for (Aluno x : alunos) {
+				System.out.println(
+						"Nome				Data da Matricula		Data de Vencimento		Status Mensalidade(s)");
+				System.out.println(x.getNome() + "		" + sdf.format(x.getDataDaMatricula()) + "			"
+						+ sdf.format(x.getMensalidade().getDataDeVencimento()) + "			"
+						+ x.getMensalidade().getSituation());
+
+			}
 		}
 		sc.close();
+	}
+
+	private static void gravadorListaAluno(List<Aluno> alunos) {
+		try (ObjectOutputStream obs = new ObjectOutputStream(new FileOutputStream("alunosgym.bin"))) {
+			obs.writeObject(alunos);
+		} catch (IOException o) {
+			o.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private static ArrayList<Aluno> leitorListasAluno() {
+		ArrayList<Aluno> alunos = null;
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alunosgym.bin"))) {
+
+			alunos = (ArrayList<Aluno>) ois.readObject();
+			return alunos;
+
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return alunos;
 	}
 
 }

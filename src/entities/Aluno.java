@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,7 +10,11 @@ import java.util.List;
 import entities.enums.Situation;
 import entities.enums.Zona;
 
-public class Aluno {
+public class Aluno implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5908739557542836919L;
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -23,20 +28,22 @@ public class Aluno {
 	private String email;
 	private FormaFisica formaFisica;
 	private Endereço endereco;
+	private Date horario;
 
-	List<Mensalidade> mensalidade = new ArrayList<>();
+	private List<Mensalidade> mensalidade = new ArrayList<>();
 
 	public Aluno() {
 
 	}
 
-	public Aluno(String nome, Long cpf, Date dataDeNascimento, Integer matricula, Date dataDaMatricula, char sexo,
-			Long celular, String email, FormaFisica formaFisica, Endereço endereco) {
-		
+	public Aluno(String nome, Long cpf, Date dataDeNascimento, Integer matricula, Date horario, Date dataDaMatricula,
+			char sexo, Long celular, String email, FormaFisica formaFisica, Endereço endereco) {
+
 		this.nome = nome;
 		this.cpf = cpf;
 		this.dataDeNascimento = dataDeNascimento;
 		this.matricula = matricula;
+		this.horario = horario;
 		this.dataDaMatricula = dataDaMatricula;
 		this.sexo = sexo;
 		this.celular = celular;
@@ -78,34 +85,30 @@ public class Aluno {
 				&& mensalidade.get(mensalidade.size() - 1).getSituation() == Situation.PAGA) {
 
 			mensalidade.add(new Mensalidade(mensalidade.get(mensalidade.size() - 1).getDataDeVencimento(),
-				mensalidade.get(mensalidade.size() - 1).getDataDePagamento(),
-				mensalidade.get(mensalidade.size() - 1).getValor()));
+					mensalidade.get(mensalidade.size() - 1).getDataDePagamento(),
+					mensalidade.get(mensalidade.size() - 1).getValor()));
 
 			if (agora.after(atrasada) && agora.before(canselada)) {
 				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.ATRASADA);
-			} 
-			else if (agora.compareTo(canselada) >= 0) {
+			} else if (agora.compareTo(canselada) >= 0) {
 				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.TREINO_CANSELADO);
-			} 
-			else {
+			} else {
 				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.PENDENTE);
 			}
 			return mensalidade.get(mensalidade.size() - 1);
-			
+
 		} else if (agora.after(mensalidade.get(mensalidade.size() - 1).getDataDeVencimento())
 				&& mensalidade.get(mensalidade.size() - 1).getSituation() != Situation.PAGA) {
-			
+
 			if (agora.after(atrasada) && agora.before(canselada)) {
 				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.ATRASADA);
-			} 
-			else if (agora.after(canselada)) {
+			} else if (agora.after(canselada)) {
 				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.TREINO_CANSELADO);
-			} 
-			else {
+			} else {
 				mensalidade.get(mensalidade.size() - 1).setSituation(Situation.PENDENTE);
 			}
 			return mensalidade.get(mensalidade.size() - 1);
-			
+
 		} else {
 			return mensalidade.get(mensalidade.size() - 1);
 		}
@@ -149,6 +152,14 @@ public class Aluno {
 
 	public Date getDataDaMatricula() {
 		return dataDaMatricula;
+	}
+
+	public Date getHorario() {
+		return horario;
+	}
+
+	public void setHorario(Date horario) {
+		this.horario = horario;
 	}
 
 	public void setDataDaMatricula(Date dataDaMatricula) {
@@ -197,10 +208,10 @@ public class Aluno {
 
 	@Override
 	public String toString() {
-		return "Aluno Nome: " + nome + "\nCPF: " + cpf + "\nData de Nascimento: " + sdf.format(dataDeNascimento)
-				+ "\nMatricula: " + matricula + "\nData da Matricula: " + sdf.format(dataDaMatricula) + "\nSexo: "
-				+ sexo + "\nCelular: " + celular + "\nEmail=" + email + "\nForma Fisica: " + formaFisica
-				+ "\nEndereco: " + endereco + "\nMensalidade: " + mensalidade.get(mensalidade.size() - 1);
+		return "Aluno\nNOME: " + nome + "\nCPF: " + cpf + "\nDATA DE NASCIMENTO: " + sdf.format(dataDeNascimento)
+				+ "\nMATRICULA: " + matricula+ "\nHORARIO: " + horario + "\nDATA DA MATRICULA: " + sdf.format(dataDaMatricula) + "\nSEXO: "
+				+ sexo + "\nCELULAR: " + celular + "\nEMAIL: " + email + "\nFORMA FISICA: " + formaFisica
+				+ "\nENDERECO: " + endereco + "\nMENSALIDADE: " + mensalidade.get(mensalidade.size() - 1);
 	}
 
 }
