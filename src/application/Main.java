@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -17,6 +18,7 @@ import entities.Aluno;
 import entities.Endereço;
 import entities.FormaFisica;
 import entities.enums.Zona;
+import service.MonthlyService;
 
 public class Main {
 
@@ -97,9 +99,9 @@ public class Main {
 
 			} while (option == 'S');
 
-			gravadorListaAluno(alunos);
 		} else if (entrada == 1) {
 			System.out.println("");
+			Collections.sort(alunos);
 			for (Aluno x : alunos) {
 				System.out.println(
 						"Nome				Data da Matricula		Data de Vencimento		Status Mensalidade(s)");
@@ -108,7 +110,29 @@ public class Main {
 						+ x.getMensalidade().getSituation());
 
 			}
+			System.out.println();
+			System.out.println("DESEJA PAGAR A MENSALIDADE DE ALGUM ALUNO ?(S/N)");
+			char alterar = sc.next().charAt(0);
+			if (alterar == 'S') {
+				sc.nextLine();
+				System.out.println("Digite o nome do aluno: ");
+				String procurar = sc.nextLine();
+				for (Aluno x : alunos) {
+					if (procurar.compareTo(x.getNome()) == 0) {
+						MonthlyService payment = new MonthlyService();
+						payment.effectPayment(x);
+						System.out.println();
+						System.out.println(
+								"Nome				Data da Matricula		Data de Vencimento		Status Mensalidade(s)");
+						System.out.println(x.getNome() + "		" + sdf.format(x.getDataDaMatricula()) + "			"
+								+ sdf.format(x.getMensalidade().getDataDeVencimento()) + "			"
+								+ x.getMensalidade().getSituation());
+					}
+				}
+			}
+			
 		}
+		gravadorListaAluno(alunos);
 		sc.close();
 	}
 

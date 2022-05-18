@@ -10,7 +10,7 @@ import java.util.List;
 import entities.enums.Situation;
 import entities.enums.Zona;
 
-public class Aluno implements Serializable {
+public class Aluno implements Serializable, Comparable<Aluno>{
 	/**
 	 * 
 	 */
@@ -206,12 +206,22 @@ public class Aluno implements Serializable {
 		this.endereco = endereco;
 	}
 
+	public void addMensalidade(Mensalidade mensalide) {
+		mensalidade.add(mensalide);
+	}
+
 	@Override
 	public String toString() {
 		return "Aluno\nNOME: " + nome + "\nCPF: " + cpf + "\nDATA DE NASCIMENTO: " + sdf.format(dataDeNascimento)
-				+ "\nMATRICULA: " + matricula+ "\nHORARIO: " + horario + "\nDATA DA MATRICULA: " + sdf.format(dataDaMatricula) + "\nSEXO: "
-				+ sexo + "\nCELULAR: " + celular + "\nEMAIL: " + email + "\nFORMA FISICA: " + formaFisica
-				+ "\nENDERECO: " + endereco + "\nMENSALIDADE: " + mensalidade.get(mensalidade.size() - 1);
+				+ "\nMATRICULA: " + matricula + "\nHORARIO: " + horario + "\nDATA DA MATRICULA: "
+				+ sdf.format(dataDaMatricula) + "\nSEXO: " + sexo + "\nCELULAR: " + celular + "\nEMAIL: " + email
+				+ "\nFORMA FISICA: " + formaFisica + "\nENDERECO: " + endereco + "\nMENSALIDADE: "
+				+ mensalidade.get(mensalidade.size() - 1);
+	}
+
+	@Override
+	public int compareTo(Aluno other) {
+		return nome.compareTo(other.getNome());
 	}
 
 }
