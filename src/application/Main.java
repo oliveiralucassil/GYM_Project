@@ -19,6 +19,7 @@ import entities.Endereço;
 import entities.FormaFisica;
 import entities.enums.Zona;
 import service.MonthlyService;
+import service.ServiceUpdate;
 
 public class Main {
 
@@ -31,6 +32,7 @@ public class Main {
 		SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm");
 
 		List<Aluno> alunos = leitorListasAluno();
+		ServiceUpdate payment = new MonthlyService();
 		System.out.println("Gerenciador de Academias ");
 		System.out.println("\nAdicionar aluno         (0) ");
 		System.out.println("Alunos Matriculados     (1) ");
@@ -41,7 +43,6 @@ public class Main {
 		int entrada = sc.nextInt();
 		System.out.println("---------------------------------");
 		char option = 'S';
-
 		if (entrada == 0) {
 
 			do {
@@ -90,8 +91,8 @@ public class Main {
 						email, new FormaFisica(altura, peso, doenca),
 						new Endereço(cidade, Zona.valueOf(zona), bairro, rua, numero)));
 
-				System.out.println("\nValor da Mensalidade: "
-						+ String.format("%.2f", alunos.get(alunos.size() - 1).getMensalidade().getValor()));
+				System.out.println("\nValor da Mensalidade: " + String.format("%.2f", alunos.get(alunos.size() - 1)
+						.getMensalidade().get(alunos.get(alunos.size() - 1).getMensalidade().size() - 1).getValor()));
 				System.out.println("\n" + alunos.get(alunos.size() - 1));
 
 				System.out.print("\nCadastrar outro Aluno (S/N)? ");
@@ -100,14 +101,18 @@ public class Main {
 			} while (option == 'S');
 
 		} else if (entrada == 1) {
+			
+
+			
 			System.out.println("");
 			Collections.sort(alunos);
 			for (Aluno x : alunos) {
+				payment.statusUpdate(x);
 				System.out.println(
 						"Nome				Data da Matricula		Data de Vencimento		Status Mensalidade(s)");
 				System.out.println(x.getNome() + "		" + sdf.format(x.getDataDaMatricula()) + "			"
-						+ sdf.format(x.getMensalidade().getDataDeVencimento()) + "			"
-						+ x.getMensalidade().getSituation());
+						+ sdf.format(x.getMensalidade().get(x.getMensalidade().size() - 1).getDataDeVencimento())
+						+ "			" + x.getMensalidade().get(x.getMensalidade().size() - 1).getSituation());
 
 			}
 			System.out.println();
@@ -119,18 +124,18 @@ public class Main {
 				String procurar = sc.nextLine();
 				for (Aluno x : alunos) {
 					if (procurar.compareTo(x.getNome()) == 0) {
-						MonthlyService payment = new MonthlyService();
 						payment.effectPayment(x);
 						System.out.println();
 						System.out.println(
 								"Nome				Data da Matricula		Data de Vencimento		Status Mensalidade(s)");
 						System.out.println(x.getNome() + "		" + sdf.format(x.getDataDaMatricula()) + "			"
-								+ sdf.format(x.getMensalidade().getDataDeVencimento()) + "			"
-								+ x.getMensalidade().getSituation());
+								+ sdf.format(
+										x.getMensalidade().get(x.getMensalidade().size() - 1).getDataDeVencimento())
+								+ "			" + x.getMensalidade().get(x.getMensalidade().size() - 1).getSituation());
 					}
 				}
 			}
-			
+
 		}
 		gravadorListaAluno(alunos);
 		sc.close();
@@ -157,5 +162,4 @@ public class Main {
 		}
 		return alunos;
 	}
-
 }
