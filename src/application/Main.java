@@ -53,13 +53,14 @@ public class Main {
 				System.out.print("\nNome: ");
 				String nome = sc.nextLine();
 				System.out.print("CPF: ");
-				Long cpf = sc.nextLong();
+				String cpf = sc.nextLine();
 				System.out.print("Data de Nascimento (dd/MM/yyyy): ");
 				Date dataDeNascimento = sdf.parse(sc.next());
 				System.out.print("Sexo (M/F): ");
 				char sexo = sc.next().charAt(0);
+				sc.nextLine();
 				System.out.print("Celular (##) #####-####: ");
-				Long celular = sc.nextLong();
+				String celular = sc.nextLine();
 				System.out.print("Email: ");
 				String email = sc.next();
 				System.out.print("Altura (cm): ");
@@ -87,12 +88,12 @@ public class Main {
 				System.out.print("Numero: ");
 				Integer numero = sc.nextInt();
 
-				alunos.add(new Aluno(nome, cpf, dataDeNascimento, matricula, horario, dataDaMatricula, sexo, celular,
-						email, new FormaFisica(altura, peso, doenca),
-						new Endereço(cidade, Zona.valueOf(zona), bairro, rua, numero)));
+				alunos.add(new Aluno(nome, cpf, dataDeNascimento, sexo, matricula, dataDaMatricula, celular, email,
+						new FormaFisica(altura, peso, doenca),
+						new Endereço(cidade, Zona.valueOf(zona.toUpperCase()), bairro, rua, numero), horario));
 
 				System.out.println("\nValor da Mensalidade: " + String.format("%.2f", alunos.get(alunos.size() - 1)
-						.getMensalidade().get(alunos.get(alunos.size() - 1).getMensalidade().size() - 1).getValor()));
+						.getMensalidades().get(alunos.get(alunos.size() - 1).getMensalidades().size() - 1).getValor()));
 				System.out.println("\n" + alunos.get(alunos.size() - 1));
 
 				System.out.print("\nCadastrar outro Aluno (S/N)? ");
@@ -101,9 +102,7 @@ public class Main {
 			} while (option == 'S');
 
 		} else if (entrada == 1) {
-			
 
-			
 			System.out.println("");
 			Collections.sort(alunos);
 			for (Aluno x : alunos) {
@@ -111,8 +110,8 @@ public class Main {
 				System.out.println(
 						"Nome				Data da Matricula		Data de Vencimento		Status Mensalidade(s)");
 				System.out.println(x.getNome() + "		" + sdf.format(x.getDataDaMatricula()) + "			"
-						+ sdf.format(x.getMensalidade().get(x.getMensalidade().size() - 1).getDataDeVencimento())
-						+ "			" + x.getMensalidade().get(x.getMensalidade().size() - 1).getSituation());
+						+ sdf.format(x.getUltimaMensalidade().getDataDeVencimento()) + "			"
+						+ x.getUltimaMensalidade().getSituation());
 
 			}
 			System.out.println();
@@ -130,8 +129,8 @@ public class Main {
 								"Nome				Data da Matricula		Data de Vencimento		Status Mensalidade(s)");
 						System.out.println(x.getNome() + "		" + sdf.format(x.getDataDaMatricula()) + "			"
 								+ sdf.format(
-										x.getMensalidade().get(x.getMensalidade().size() - 1).getDataDeVencimento())
-								+ "			" + x.getMensalidade().get(x.getMensalidade().size() - 1).getSituation());
+										x.getMensalidades().get(x.getMensalidades().size() - 1).getDataDeVencimento())
+								+ "			" + x.getMensalidades().get(x.getMensalidades().size() - 1).getSituation());
 					}
 				}
 			}
@@ -149,7 +148,7 @@ public class Main {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked"})
 	private static ArrayList<Aluno> leitorListasAluno() {
 		ArrayList<Aluno> alunos = null;
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alunosgym.bin"))) {

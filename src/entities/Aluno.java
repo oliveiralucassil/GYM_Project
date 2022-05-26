@@ -9,7 +9,7 @@ import java.util.List;
 
 import entities.enums.Zona;
 
-public class Aluno implements Serializable, Comparable<Aluno> {
+public class Aluno extends Pessoa implements Serializable, Comparable<Aluno>{
 	/**
 	 * 
 	 */
@@ -17,13 +17,9 @@ public class Aluno implements Serializable, Comparable<Aluno> {
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private String nome;
-	private Long cpf;
-	private Date dataDeNascimento;
 	private Integer matricula;
 	private Date dataDaMatricula;
-	private char sexo;
-	private Long celular;
+	private String celular;
 	private String email;
 	private FormaFisica formaFisica;
 	private Endereço endereco;
@@ -35,16 +31,12 @@ public class Aluno implements Serializable, Comparable<Aluno> {
 
 	}
 
-	public Aluno(String nome, Long cpf, Date dataDeNascimento, Integer matricula, Date horario, Date dataDaMatricula,
-			char sexo, Long celular, String email, FormaFisica formaFisica, Endereço endereco) {
-
-		this.nome = nome;
-		this.cpf = cpf;
-		this.dataDeNascimento = dataDeNascimento;
+	public Aluno(String nome, String cpf, Date dataDeNascimento, char sexo, Integer matricula, Date dataDaMatricula,
+			String celular, String email, FormaFisica formaFisica, Endereço endereco, Date horario) {
+		super(nome, cpf, dataDeNascimento, sexo);
 		this.matricula = matricula;
 		this.horario = horario;
 		this.dataDaMatricula = dataDaMatricula;
-		this.sexo = sexo;
 		this.celular = celular;
 		this.email = email;
 		this.formaFisica = formaFisica;
@@ -66,7 +58,7 @@ public class Aluno implements Serializable, Comparable<Aluno> {
 
 	}
 
-	public List<Mensalidade> getMensalidade() {
+	public List<Mensalidade> getMensalidades() {
 		return mensalidade;
 	}
 
@@ -74,28 +66,8 @@ public class Aluno implements Serializable, Comparable<Aluno> {
 		this.mensalidade = mensalidade;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public Long getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(Long cpf) {
-		this.cpf = cpf;
-	}
-
-	public Date getDataDeNascimento() {
-		return dataDeNascimento;
-	}
-
-	public void setDataDeNascimento(Date dataDeNascimento) {
-		this.dataDeNascimento = dataDeNascimento;
+	public Mensalidade getUltimaMensalidade() {
+		return this.getMensalidades().get(getMensalidades().size() - 1);
 	}
 
 	public Integer getMatricula() {
@@ -122,19 +94,11 @@ public class Aluno implements Serializable, Comparable<Aluno> {
 		this.dataDaMatricula = dataDaMatricula;
 	}
 
-	public char getSexo() {
-		return sexo;
-	}
-
-	public void setSexo(char sexo) {
-		this.sexo = sexo;
-	}
-
-	public Long getCelular() {
+	public String getCelular() {
 		return celular;
 	}
 
-	public void setCelular(Long celular) {
+	public void setCelular(String celular) {
 		this.celular = celular;
 	}
 
@@ -168,16 +132,14 @@ public class Aluno implements Serializable, Comparable<Aluno> {
 
 	@Override
 	public String toString() {
-		return "Aluno\nNOME: " + nome + "\nCPF: " + cpf + "\nDATA DE NASCIMENTO: " + sdf.format(dataDeNascimento)
-				+ "\nMATRICULA: " + matricula + "\nHORARIO: " + horario + "\nDATA DA MATRICULA: "
-				+ sdf.format(dataDaMatricula) + "\nSEXO: " + sexo + "\nCELULAR: " + celular + "\nEMAIL: " + email
-				+ "\nFORMA FISICA: " + formaFisica + "\nENDERECO: " + endereco + "\nMENSALIDADE: "
-				+ mensalidade.get(mensalidade.size() - 1);
+		return "Aluno\nNOME: " + getNome() + "\nCPF: " + getCpf() + "\nDATA DE NASCIMENTO: "
+				+ sdf.format(getDataDeNascimento()) + "\nMATRICULA: " + matricula + "\nHORARIO: " + horario
+				+ "\nDATA DA MATRICULA: " + sdf.format(dataDaMatricula) + "\nSEXO: " + getSexo() + "\nCELULAR: "
+				+ celular + "\nEMAIL: " + email + "\nFORMA FISICA: " + formaFisica + "\nENDERECO: " + endereco
+				+ "\nMENSALIDADE: " + mensalidade.get(mensalidade.size() - 1);
 	}
-
 	@Override
 	public int compareTo(Aluno other) {
-		return nome.compareTo(other.getNome());
+		return getNome().compareTo(other.getNome());
 	}
-
 }
